@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <!-- <ion-title>
+      Penjualan
+    </ion-title> -->
+    <ion-item>
+      <ion-badge color="danger" slot="start">{{minus}}</ion-badge>
+      <!-- <ion-label color="danger"> </ion-label>
+      | -->
+      <ion-label color="primary">Total hari ini </ion-label>
+      <ion-badge color="success" slot="end">{{total}}</ion-badge>
+      <ion-badge slot="end">{{add}}</ion-badge>
+    </ion-item>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-button color="success" fill="solid" (click)="open_link()" >
+    refresh
+  </ion-button>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tab 1</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-card *ngFor="let item of datas" >
+    <ion-item *ngIf="item.nama != ''">
+      <div>
+        <ion-label>{{item.nama}}</ion-label>
+        <ion-button color="danger" fill="solid" (click)="kurang(item.id)" >
+          kurang
+        </ion-button>
+        <ion-button fill="solid" (click)="tambah(item.id)" >
+          tambah
+        </ion-button>
+      </div>
+    </ion-item>
+  </ion-card>
+
+  <!-- <app-explore-container name="Tab 1 page"></app-explore-container> -->
+</ion-content>

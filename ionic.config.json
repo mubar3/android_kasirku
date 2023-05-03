@@ -1,0 +1,7 @@
+{
+  "name": "android_kasirku",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
