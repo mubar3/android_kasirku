@@ -9,4 +9,7 @@ Kasirku
 <a href="https://mbshop.id"><img src="readme/1 (2).jpg" width="200"></a>
 <a href="https://mbshop.id"><img src="readme/1 (3).jpg" width="200"></a>
 <a href="https://mbshop.id"><img src="readme/1 (4).jpg" width="200"></a>
+<a href="https://mbshop.id"><img src="readme/2 (1).jpg" width="200"></a>
+<a href="https://mbshop.id"><img src="readme/2 (2).jpg" width="200"></a>
+<a href="https://mbshop.id"><img src="readme/2 (3).jpg" width="200"></a>
 </p>

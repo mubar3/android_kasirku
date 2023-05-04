@@ -47,6 +47,7 @@
       <ion-badge color="success">{{item.stok}}</ion-badge>
       <ion-label>{{item.nama}}</ion-label>
       <ion-badge color="danger">{{item.kurang}}</ion-badge>
+      <ion-badge color="success" slot="end">{{item.tambah - item.kurang}}</ion-badge>
       <ion-badge color="" slot="end">{{item.tambah}}</ion-badge>
     </ion-item>
     <ion-item>
