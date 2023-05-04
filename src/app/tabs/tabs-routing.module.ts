@@ -13,6 +13,10 @@ const routes: Routes = [
         loadChildren: () => import('../utama/tab1.module').then(m => m.Tab1PageModule)
       },
       {
+        path: 'tab2',
+        loadChildren: () => import('../barang/barang.module').then(m => m.BarangPageModule)
+      },
+      {
         path: 'tab3',
         loadChildren: () => import('../about/tab3.module').then(m => m.Tab3PageModule)
       },

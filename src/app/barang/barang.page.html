@@ -1,0 +1,89 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <!-- <ion-title>Tambah</ion-title> -->
+    <ion-card>
+      <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-input label="nama" [(ngModel)]="nama" labelPlacement="stacked" placeholder="Wajib"></ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-input label="harga" [(ngModel)]="harga" labelPlacement="stacked" placeholder="Wajib"></ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-input label="stok" [(ngModel)]="stok" labelPlacement="stacked" placeholder="unlimited"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      </ion-item>
+    </ion-card>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">barang</ion-title>
+    </ion-toolbar>
+    
+  </ion-header>
+  
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button color="success" fill="solid" (click)="open_link()" >
+          Refresh
+        </ion-button>
+      </ion-col>
+      <ion-col>
+      </ion-col>
+      <ion-col>
+        <ion-button color="primary" fill="solid" (click)="tambah_barang()" >
+          Tambah
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-card *ngFor="let item of datas_barang; index as i" >
+    <form  #form="ngForm" (ngSubmit)="alert_update(form,i,item.id)">
+      <ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-input name="name" label="nama" [ngModel]="nama_update[i]" [ngModelOptions]="{standalone: false}" labelPlacement="stacked" placeholder="Enter text"></ion-input>
+            </ion-col>
+            <ion-col>
+              <ion-input name="harga"  label="harga" [ngModel]="harga_update[i]" [ngModelOptions]="{standalone: false}" labelPlacement="stacked" placeholder="Enter text"></ion-input>
+            </ion-col>
+            <ion-col>
+              <ion-input name="stok"  label="stok" [ngModel]="stok_update[i]" [ngModelOptions]="{standalone: false}" labelPlacement="stacked" placeholder="unlimited"></ion-input>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <ion-item>
+        
+        <ion-grid>
+          <ion-row>
+          <ion-col>
+            <ion-toggle *ngIf="item.status" (click)="disable_barang(id_update[i])" checked ></ion-toggle>
+              <ion-toggle *ngIf="!item.status" (click)="enable_barang(id_update[i])" ></ion-toggle>
+            </ion-col>
+            <ion-col>
+              <ion-button color="danger" fill="solid" (click)="alert_barang(id_update[i])" >
+                <ion-icon name='trash' ></ion-icon>
+              </ion-button>
+            </ion-col>
+            <ion-col>
+                <ion-button type="submit" color="primary" fill="solid" >
+                  Update
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+        </form>
+      </ion-card>
+    </ion-content>
+    

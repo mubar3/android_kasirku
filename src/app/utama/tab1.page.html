@@ -15,9 +15,27 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  
   <ion-button color="success" fill="solid" (click)="open_link()" >
     refresh
   </ion-button>
+  <ion-item *ngIf="jenis == 'utama'">
+    <form  #form="ngForm" (ngSubmit)="set_date(form)">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-input name="awal" label="Awal" [ngModel]="tgl_awal" labelPlacement="stacked" placeholder="Enter text" type="date"></ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-input  name="akhir" label="Akhir" [ngModel]="tgl_akhir" labelPlacement="stacked" placeholder="Enter text" type="date"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-button  type="submit" fill="solid" >
+        get
+      </ion-button>
+    </form>
+  </ion-item>
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Tab 1</ion-title>
@@ -25,8 +43,14 @@
   </ion-header>
   <ion-card *ngFor="let item of datas" >
     <ion-item *ngIf="item.nama != ''">
+      <!-- <ion-label>Followers</ion-label> -->
+      <ion-badge color="success">{{item.stok}}</ion-badge>
+      <ion-label>{{item.nama}}</ion-label>
+      <ion-badge color="danger">{{item.kurang}}</ion-badge>
+      <ion-badge color="" slot="end">{{item.tambah}}</ion-badge>
+    </ion-item>
+    <ion-item>
       <div>
-        <ion-label>{{item.nama}}</ion-label>
         <ion-button color="danger" fill="solid" (click)="kurang(item.id)" >
           kurang
         </ion-button>

@@ -20,6 +20,11 @@ export class Tab1Page {
   public total=0;
   // public storage_get='';
   private session='';
+  public jenis='';
+  // public tgl_awal='';
+  // public tgl_akhir='';
+  public tgl_awal=this.datepipe.transform(new Date(), 'yyyy-MM-dd');
+  public tgl_akhir=this.datepipe.transform(new Date(), 'yyyy-MM-dd');
   // public nama='';
   constructor(
     private http: HttpClient,
@@ -29,14 +34,14 @@ export class Tab1Page {
     private route: Router,
     private storage: Storage,
     ) {
-      
     this.cek_login()
     this.open_link()
   }
 
   async cek_login(){
     this.session=await this.storage.get('session');
-    console.log(this.storage.get('session'))
+    this.jenis=await this.storage.get('jenis');
+    // console.log(this.jenis)
     if(this.session != ''){
 
       let parameter={
@@ -52,6 +57,13 @@ export class Tab1Page {
     }else{
         this.route.navigate(['/']);
     }
+  }
+
+  set_date(value:any){
+    this.tgl_awal=value.value.awal
+    this.tgl_akhir=value.value.akhir
+    // console.log(this.tgl_awal)
+    this.open_link()
   }
   
   async open_link(){
@@ -74,7 +86,9 @@ export class Tab1Page {
     await loading.present();
 
     let parameter={
-      "session" : this.session
+      "session" : this.session,
+      "tanggal_awal" : this.tgl_awal,
+      "tanggal_akhir" : this.tgl_akhir,
     }
     this.penjualan();
     this.http.post(`${environment.baseUrl}`+'/get_barang',parameter,{})
@@ -82,6 +96,7 @@ export class Tab1Page {
         const response=JSON.parse(JSON.stringify(data))
         if(response.status){
           loading.dismiss();
+          // console.log(response.data)
           this.datas=response.data
         }else{
           loading.dismiss();
@@ -96,8 +111,8 @@ export class Tab1Page {
   penjualan(){
     let parameter={
       "session" : this.session,
-      "tanggal_awal" : this.datepipe.transform(new Date(), 'yyyy-MM-dd'),
-      "tanggal_akhir" : this.datepipe.transform(new Date(), 'yyyy-MM-dd'),
+      "tanggal_awal" : this.tgl_awal,
+      "tanggal_akhir" : this.tgl_akhir,
     }
     this.http.post(`${environment.baseUrl}`+'/detail_penjualan',parameter,{})
       .subscribe(data => {

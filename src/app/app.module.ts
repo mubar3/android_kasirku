@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { Drivers } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,6 +18,7 @@ import { IonicStorageModule } from '@ionic/storage-angular';
         IonicModule.forRoot(), 
         AppRoutingModule,
         HttpClientModule,
+        FormsModule,
         [
           IonicStorageModule.forRoot({
             driverOrder: [Drivers.SecureStorage, Drivers.IndexedDB, Drivers.LocalStorage]

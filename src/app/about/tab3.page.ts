@@ -25,6 +25,8 @@ export class Tab3Page {
     });
     await loading.present();
     this.storage.remove('session');
+    this.storage.remove('jenis');
+    this.storage.remove('toko_id');
     loading.dismiss();
     this.route.navigate(['/']);
   }

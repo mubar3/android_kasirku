@@ -60,6 +60,7 @@ export class LoginPage implements OnInit {
       .subscribe(data => {
         const response=JSON.parse(JSON.stringify(data))
         if(response.status){
+          // console.log(response)
           loading.dismiss();
           this.email=''
           this.password=''
