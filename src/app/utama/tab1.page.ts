@@ -67,6 +67,7 @@ export class Tab1Page {
   }
   
   async open_link(){
+    this.jenis=await this.storage.get('jenis');
     // const headers = {
     //   'Content-Type': 'application/json',
     //   'secretkey': 'xxx',
