@@ -6,6 +6,7 @@ import { DatePipe } from '@angular/common';
 import {AppComponent} from '../app.component';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
+import { AlertController} from '@ionic/angular';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class Tab1Page {
     public myapp: AppComponent,
     private route: Router,
     private storage: Storage,
+    private alertController: AlertController,
     ) {
     this.cek_login()
     this.open_link()
@@ -130,6 +132,30 @@ export class Tab1Page {
       });  
   }
 
+  async alert_tambah(id:any,barang:any){
+    const alert = await this.alertController.create({
+      header: 'Tambah Penjualan',
+      // subHeader: 'Invalid number!',
+      message: 'Yakin tambah penjualan '+barang+' ?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            // console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.tambah(id)
+            // console.log('Yes clicked');
+          }
+        }]
+    });
+    await alert.present();
+  }
+
   async tambah(id:any){
     const loading = await this.loadingCtrl.create({
       message: 'Loading..',
@@ -156,6 +182,30 @@ export class Tab1Page {
         loading.dismiss();
         this.myapp.presentAlert2('eror');
       });  
+  }
+
+  async alert_kurang(id:any,barang:any){
+    const alert = await this.alertController.create({
+      header: 'Kurang Penjualan',
+      // subHeader: 'Invalid number!',
+      message: 'Yakin kurang penjualan '+barang+' ?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            // console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.kurang(id)
+            // console.log('Yes clicked');
+          }
+        }]
+    });
+    await alert.present();
   }
 
   async kurang(id:any){

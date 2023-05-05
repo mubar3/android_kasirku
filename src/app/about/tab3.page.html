@@ -14,13 +14,18 @@
   <ion-text color="black" >
     <ion-grid [fixed]="false">
       <ion-row>
-        <ion-col></ion-col>
+        <ion-col>
+          <ion-button color="success" fill="solid" (click)="alert_data()" >
+            Edit data
+          </ion-button>
+        </ion-col>
+        <ion-col>
+        </ion-col>
         <ion-col>
           <ion-button color="danger" fill="solid" (click)="logout()" >
             Logout
           </ion-button>
         </ion-col>
-        <ion-col></ion-col>
       </ion-row>
     </ion-grid>
   </ion-text>

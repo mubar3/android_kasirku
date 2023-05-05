@@ -32,6 +32,8 @@ export class TabsPage {
             // console.log(response)
             this.storage.set('toko_id', response.data.toko_id)
             this.storage.set('jenis', response.data.jenis)
+            this.storage.set('jenis', response.data.jenis)
+            this.storage.set('email', response.data.email)
             this.jenis=response.data.jenis
           }
         });  
