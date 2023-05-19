@@ -25,6 +25,10 @@ const routes: Routes = [
         loadChildren: () => import('../kasir/kasir.module').then(m => m.KasirPageModule)
       },
       {
+        path: 'transaksi',
+        loadChildren: () => import('../transaksi/transaksi.module').then(m => m.TransaksiPageModule)
+      },
+      {
         path: '',
         redirectTo: '/dashboard/tab1',
         pathMatch: 'full'

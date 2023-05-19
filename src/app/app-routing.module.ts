@@ -22,6 +22,10 @@ const routes: Routes = [
     path: 'kasir',
     loadChildren: () => import('./kasir/kasir.module').then( m => m.KasirPageModule)
   },
+  {
+    path: 'transaksi',
+    loadChildren: () => import('./transaksi/transaksi.module').then( m => m.TransaksiPageModule)
+  },
 ];
 @NgModule({
   imports: [
