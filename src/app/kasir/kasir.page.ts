@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { LoadingController} from '@ionic/angular';
@@ -8,25 +8,23 @@ import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { AlertController} from '@ionic/angular';
 
-
 @Component({
-  selector: 'app-tab1',
-  templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss']
+  selector: 'app-kasir',
+  templateUrl: './kasir.page.html',
+  styleUrls: ['./kasir.page.scss'],
 })
-export class Tab1Page {
-  public datas=([] as any[]);
-  public minus=0;
-  public add=0;
-  public total=0;
-  // public storage_get='';
-  private session='';
-  public jenis='';
-  // public tgl_awal='';
-  // public tgl_akhir='';
+export class KasirPage implements OnInit {
   public tgl_awal=this.datepipe.transform(new Date(), 'yyyy-MM-dd');
   public tgl_akhir=this.datepipe.transform(new Date(), 'yyyy-MM-dd');
-  // public nama='';
+  private session='';
+  public nama='';
+  public jenis='';
+  public total_harga=0;
+  public datas=([] as any[]);
+  public penjualan_barang=([] as any[]);
+  public harga_barang=([] as any[]);
+  public data_simpan=([] as any[]);
+
   constructor(
     private http: HttpClient,
     public datepipe: DatePipe,
@@ -35,11 +33,15 @@ export class Tab1Page {
     private route: Router,
     private storage: Storage,
     private alertController: AlertController,
-    ) {
-    this.cek_login()
-    this.open_link()
-  }
-  
+    ) { 
+      this.ngOnInit()  
+    }
+    
+    ngOnInit() {
+      this.cek_login()
+      this.open_link()
+    }
+    
   async cek_login(){
     this.session=await this.storage.get('session');
     this.jenis=await this.storage.get('jenis');
@@ -61,25 +63,26 @@ export class Tab1Page {
     }
   }
 
-  set_date(value:any){
-    this.tgl_awal=value.value.awal
-    this.tgl_akhir=value.value.akhir
-    // console.log(this.tgl_awal)
-    this.open_link()
+  async set_penjualan_barang(id:any){
+    this.penjualan_barang[id] = await this.storage.get('kasir_barang['+id+']')
+    this.hitung_harga()
+    // console.log(this.total_harga)
+  }
+
+  hitung_harga(){
+    let harga_barang=this.harga_barang
+    let total_harga=0;
+    this.penjualan_barang.forEach(function (value,index) {
+      // console.log(value)
+      if(value > 0){
+        total_harga=total_harga + (value * harga_barang[index])
+      }
+    })
+    this.total_harga=total_harga
   }
   
   async open_link(){
     this.jenis=await this.storage.get('jenis');
-    // const headers = {
-    //   'Content-Type': 'application/json',
-    //   'secretkey': 'xxx',
-    //   'Access-Control-Allow-Origin' : '*',
-    //   'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT',
-    //   'Accept' : 'application/json',
-    // }
-    // const options = {  headers:headers, withCredintials: true};
-    // this.http.post(`${environment.baseUrl}`+'/get_barang',{},option)
-    // this.http.get(`${environment.baseUrl}`+'/get_barang')
 
     
     const loading = await this.loadingCtrl.create({
@@ -93,13 +96,18 @@ export class Tab1Page {
       "tanggal_awal" : this.tgl_awal,
       "tanggal_akhir" : this.tgl_akhir,
     }
-    this.penjualan();
     this.http.post(`${environment.baseUrl}`+'/get_barang_new',parameter,{})
       .subscribe(data => {
         const response=JSON.parse(JSON.stringify(data))
         if(response.status){
+          Object.keys(response.data).forEach((elt, index)=>{
+            this.set_penjualan_barang(response.data[elt]['id'])
+            this.harga_barang[response.data[elt]['id']]=response.data[elt]['harga']
+          })
+          
+          // this.hitung_harga()
           loading.dismiss();
-          // console.log(response.data)
+          // console.log(this.total_harga)
           this.datas=response.data
         }else{
           loading.dismiss();
@@ -108,28 +116,7 @@ export class Tab1Page {
       },error=>{
         loading.dismiss();
         this.myapp.presentAlert2('eror');
-      });  
-  }
-
-  penjualan(){
-    let parameter={
-      "session" : this.session,
-      "tanggal_awal" : this.tgl_awal,
-      "tanggal_akhir" : this.tgl_akhir,
-    }
-    this.http.post(`${environment.baseUrl}`+'/detail_penjualan',parameter,{})
-      .subscribe(data => {
-        const response=JSON.parse(JSON.stringify(data))
-        if(response.status){
-          this.add=response.tambah
-          this.minus=response.kurang
-          this.total=response.total
-        }else{
-          this.myapp.presentAlert2(JSON.stringify(response.message));
-        }
-      },error=>{
-        this.myapp.presentAlert2('eror');
-      });  
+      }); 
   }
 
   async alert_tambah(id:any,barang:any){
@@ -157,34 +144,6 @@ export class Tab1Page {
     await alert.present();
   }
 
-  async tambah(id:any){
-    const loading = await this.loadingCtrl.create({
-      message: 'Loading..',
-      spinner: 'bubbles',
-    });
-    await loading.present();
-    
-    let parameter={
-      "session" : this.session,
-      "barang_id" : id,
-    }
-    this.http.post(`${environment.baseUrl}`+'/add_stok',parameter,{})
-      .subscribe(data => {
-        const response=JSON.parse(JSON.stringify(data))
-        if(response.status){
-          loading.dismiss();
-          this.open_link();
-          this.myapp.presentToast_copy('bottom','Berhasil tambah')
-        }else{
-          loading.dismiss();
-          this.myapp.presentAlert2(JSON.stringify(response.message));
-        }
-      },error=>{
-        loading.dismiss();
-        this.myapp.presentAlert2('eror');
-      });  
-  }
-
   async tambah_storage(id:any){
     const loading = await this.loadingCtrl.create({
       message: 'Loading..',
@@ -193,6 +152,7 @@ export class Tab1Page {
     await loading.present();
 
     this.storage.set('kasir_barang['+id+']',await this.storage.get('kasir_barang['+id+']') + 1)
+    this.ngOnInit()  
     loading.dismiss();
   }
 
@@ -221,35 +181,6 @@ export class Tab1Page {
     await alert.present();
   }
 
-  async kurang(id:any){
-    const loading = await this.loadingCtrl.create({
-      message: 'Loading..',
-      spinner: 'bubbles',
-    });
-    await loading.present();
-    
-    let parameter={
-      "session" : this.session,
-      "barang_id" : id,
-    }
-    this.http.post(`${environment.baseUrl}`+'/remove_stok',parameter,{})
-      .subscribe(data => {
-        const response=JSON.parse(JSON.stringify(data))
-        if(response.status){
-          loading.dismiss();
-          this.open_link();
-          this.myapp.presentToast_copy('bottom','Berhasil kurang')
-        }else{
-          loading.dismiss();
-          this.myapp.presentAlert2(JSON.stringify(response.message));
-        }
-      },error=>{
-        loading.dismiss();
-        this.myapp.presentAlert2('eror');
-      });  
-
-  }
-
   async kurang_storage(id:any){
     const loading = await this.loadingCtrl.create({
       message: 'Loading..',
@@ -258,7 +189,78 @@ export class Tab1Page {
     await loading.present();
 
     this.storage.set('kasir_barang['+id+']',await this.storage.get('kasir_barang['+id+']') - 1)
+    this.ngOnInit()  
     loading.dismiss();
+  }
+
+  async alert_simpan(){
+    let data_simpan=this.data_simpan;
+    data_simpan=[];
+    this.penjualan_barang.forEach(function (value,index) {
+      if(value > 0){
+        data_simpan.push({id: index, banyak: value})
+      }
+    })
+    
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading..',
+      spinner: 'bubbles',
+    });
+    await loading.present();
+    
+    let parameter={
+      "session" : this.session,
+      "nama" : this.nama,
+      "barang" : JSON.stringify(data_simpan),
+    }
+    this.http.post(`${environment.baseUrl}`+'/pembelian',parameter,{})
+      .subscribe(data => {
+        const response=JSON.parse(JSON.stringify(data))
+        if(response.status){
+
+          this.del_storage_pembelian()
+          this.nama=''
+          this.total_harga=0
+          this.penjualan_barang=[]
+          this.harga_barang=[]
+          this.ngOnInit()  
+          console.log(this.penjualan_barang)
+          loading.dismiss();
+          this.myapp.presentToast_copy('bottom','Berhasil simpan')
+        }else{
+          loading.dismiss();
+          this.myapp.presentAlert2(JSON.stringify(response.message));
+        }
+      },error=>{
+        loading.dismiss();
+        this.myapp.presentAlert2('eror');
+      });  
+  }
+
+  async del_storage_pembelian(){
+    let parameter={
+      "session" : this.session,
+      "tanggal_awal" : this.tgl_awal,
+      "tanggal_akhir" : this.tgl_akhir,
+    }
+    this.http.post(`${environment.baseUrl}`+'/get_barang_new',parameter,{})
+      .subscribe(data => {
+        const response=JSON.parse(JSON.stringify(data))
+        if(response.status){
+          Object.keys(response.data).forEach((elt, index)=>{
+            this.del_storage_pem(response.data[elt]['id'])
+          })
+          
+        }else{
+          this.myapp.presentAlert2(JSON.stringify(response.message));
+        }
+      },error=>{
+        this.myapp.presentAlert2('eror');
+      }); 
+  }
+
+  async del_storage_pem(id:any){
+    this.storage.remove('kasir_barang['+id+']')
   }
 
 }

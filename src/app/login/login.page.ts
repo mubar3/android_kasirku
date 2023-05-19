@@ -35,7 +35,7 @@ export class LoginPage implements OnInit {
       let parameter={
         "session" : this.session
       }
-      this.http.post(`${environment.baseUrl}`+'/get_barang',parameter,{})
+      this.http.post(`${environment.baseUrl}`+'/get_barang_new',parameter,{})
         .subscribe(data => {
           const response=JSON.parse(JSON.stringify(data))
           if(response.status){

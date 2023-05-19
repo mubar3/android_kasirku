@@ -18,6 +18,10 @@ const routes: Routes = [
     path: 'barang',
     loadChildren: () => import('./barang/barang.module').then( m => m.BarangPageModule)
   },
+  {
+    path: 'kasir',
+    loadChildren: () => import('./kasir/kasir.module').then( m => m.KasirPageModule)
+  },
 ];
 @NgModule({
   imports: [

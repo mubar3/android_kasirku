@@ -21,6 +21,10 @@ const routes: Routes = [
         loadChildren: () => import('../about/tab3.module').then(m => m.Tab3PageModule)
       },
       {
+        path: 'kasir',
+        loadChildren: () => import('../kasir/kasir.module').then(m => m.KasirPageModule)
+      },
+      {
         path: '',
         redirectTo: '/dashboard/tab1',
         pathMatch: 'full'

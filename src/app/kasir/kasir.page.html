@@ -1,0 +1,51 @@
+<ion-header [translucent]="true">
+  
+  <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-input [(ngModel)]="nama" label="Pembeli" labelPlacement="stacked" placeholder="Nama"></ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-input name="total" label="Total harga" value="{{ total_harga | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-button expand="block" (click)="alert_simpan()"  color="primary" fill="clear" >
+              Simpan
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+  </ion-item>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-button color="success" fill="solid" (click)="ngOnInit()" >
+    Refresh
+  </ion-button>
+  <ion-card *ngFor="let item of datas" >
+    <div *ngIf="penjualan_barang[item.id] > 0">
+      <ion-item>
+        <ion-label>
+          <ion-input name="total" label="Barang" value="{{ item.nama }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+        </ion-label>
+        <ion-label>
+          <ion-input name="total" label="Harga" value="{{ item.harga | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+        </ion-label>
+        <ion-label>
+          <ion-input name="total" label="Banyak" value="{{penjualan_barang[item.id]}}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+        </ion-label>
+        </ion-item>
+      <ion-item>
+        <div>
+          <ion-button color="danger" fill="solid" (click)="alert_kurang(item.id,item.nama)" >
+            kurang
+          </ion-button>
+          <ion-button fill="solid" (click)="alert_tambah(item.id,item.nama)" >
+            tambah
+          </ion-button>
+        </div>
+      </ion-item>
+    </div>
+  </ion-card>
+</ion-content>
