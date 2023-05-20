@@ -117,7 +117,7 @@ export class Tab1Page {
       "tanggal_awal" : this.tgl_awal,
       "tanggal_akhir" : this.tgl_akhir,
     }
-    this.http.post(`${environment.baseUrl}`+'/detail_penjualan',parameter,{})
+    this.http.post(`${environment.baseUrl}`+'/detail_penjualan_new',parameter,{})
       .subscribe(data => {
         const response=JSON.parse(JSON.stringify(data))
         if(response.status){
