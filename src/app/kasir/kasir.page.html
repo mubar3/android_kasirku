@@ -30,12 +30,14 @@
           <ion-input name="total" label="Barang" value="{{ item.nama }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
         </ion-label>
         <ion-label>
-          <ion-input name="total" label="Harga" value="{{ item.harga | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
-        </ion-label>
-        <ion-label>
           <ion-input name="total" label="Banyak" value="{{penjualan_barang[item.id]}}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
         </ion-label>
         </ion-item>
+      <ion-item>
+        <div>
+          <ion-input name="total" label="Harga" value="{{ item.harga | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+        </div>
+      </ion-item>
       <ion-item>
         <div>
           <ion-button color="danger" fill="solid" (click)="alert_kurang(item.id,item.nama)" >

@@ -22,6 +22,7 @@ export class Tab1Page {
   // public storage_get='';
   private session='';
   public jenis='';
+  public cari_barang='';
   // public tgl_awal='';
   // public tgl_akhir='';
   public tgl_awal=this.datepipe.transform(new Date(), 'yyyy-MM-dd');
@@ -92,6 +93,7 @@ export class Tab1Page {
       "session" : this.session,
       "tanggal_awal" : this.tgl_awal,
       "tanggal_akhir" : this.tgl_akhir,
+      "cari" : this.cari_barang,
     }
     this.penjualan();
     this.http.post(`${environment.baseUrl}`+'/get_barang_new',parameter,{})

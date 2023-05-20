@@ -11,14 +11,26 @@
       <ion-badge color="success" slot="end">{{total}}</ion-badge>
       <!-- <ion-badge slot="end">{{add}}</ion-badge> -->
     </ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-input label="Cari" [(ngModel)]="cari_barang" labelPlacement="stacked" placeholder="Nama / Harga"></ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-button expand="block" color="success" fill="solid" (click)="open_link()" >
+              refresh
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   
-  <ion-button color="success" fill="solid" (click)="open_link()" >
+  <!-- <ion-button color="success" fill="solid" (click)="open_link()" >
     refresh
-  </ion-button>
+  </ion-button> -->
   <ion-item *ngIf="jenis == 'utama'">
     <form  #form="ngForm" (ngSubmit)="set_date(form)">
       <ion-grid>
@@ -44,11 +56,22 @@
   <ion-card *ngFor="let item of datas" >
     <ion-item *ngIf="item.nama != ''">
       <!-- <ion-label>Followers</ion-label> -->
-      <ion-badge color="success">{{item.stok}}</ion-badge>
       <ion-label>{{item.nama}}</ion-label>
       <!-- <ion-badge color="danger">{{item.kurang}}</ion-badge> -->
       <ion-badge color="success" slot="end">{{item.tambah - item.kurang}}</ion-badge>
       <!-- <ion-badge color="" slot="end">{{item.tambah}}</ion-badge> -->
+    </ion-item>
+    <ion-item>
+      <div>
+        <ion-row>
+          <ion-col>
+            <ion-label>{{item.harga | currency:'Rp ':'symbol':'3.0' }}</ion-label>
+          </ion-col>
+          <ion-col *ngIf="item.stok > 0">
+            <ion-badge color="danger">Stok : {{item.stok}}</ion-badge>
+          </ion-col>
+        </ion-row>
+      </div>
     </ion-item>
     <ion-item>
       <div>
