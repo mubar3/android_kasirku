@@ -23,8 +23,9 @@
   <ion-button color="success" fill="solid" (click)="ngOnInit()" >
     Refresh
   </ion-button>
-  <ion-card *ngFor="let item of datas" >
-    <div *ngIf="penjualan_barang[item.id] > 0">
+  <div *ngFor="let item of datas" >
+  <ion-card *ngIf="penjualan_barang[item.id] > 0" >
+    <div >
       <ion-item>
         <ion-label>
           <ion-input name="total" label="Barang" value="{{ item.nama }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
@@ -50,4 +51,5 @@
       </ion-item>
     </div>
   </ion-card>
+  </div>
 </ion-content>

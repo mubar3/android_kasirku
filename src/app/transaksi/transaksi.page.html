@@ -1,10 +1,29 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>transaksi</ion-title>
-  </ion-toolbar>
+  
+  <ion-item>
+    <ion-label color="primary">Transaksi </ion-label>
+    <ion-badge color="success" slot="end">{{total_harga | currency:'Rp ':'symbol':'3.0' }}</ion-badge>
+  </ion-item>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <ion-item *ngIf="jenis == 'utama'">
+    <form  #form="ngForm" (ngSubmit)="set_date(form)">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-input name="awal" label="Awal" [ngModel]="tgl_awal" labelPlacement="stacked" placeholder="Enter text" type="date"></ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-input  name="akhir" label="Akhir" [ngModel]="tgl_akhir" labelPlacement="stacked" placeholder="Enter text" type="date"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-button  type="submit" fill="solid" >
+        get
+      </ion-button>
+    </form>
+  </ion-item>
   
   <ion-button color="success" fill="solid" (click)="ngOnInit()" >
     Refresh

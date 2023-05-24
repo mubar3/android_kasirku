@@ -19,6 +19,7 @@ export class TransaksiPage implements OnInit {
   public datas=([] as any[]);
   private session='';
   public jenis='';
+  public total_harga=0;
 
   constructor(
     private http: HttpClient,
@@ -29,6 +30,7 @@ export class TransaksiPage implements OnInit {
     private storage: Storage,
     private alertController: AlertController,
     ) {
+      this.cek_login()
       this.ngOnInit()  
      }
 
@@ -77,6 +79,10 @@ export class TransaksiPage implements OnInit {
       .subscribe(data => {
         const response=JSON.parse(JSON.stringify(data))
         if(response.status){
+          this.total_harga=0
+          Object.keys(response.data).forEach((elt, index)=>{
+            this.total_harga=this.total_harga + ( response.data[elt]['total_harga'] )
+          })
           
           loading.dismiss();
           this.datas=response.data
@@ -88,6 +94,15 @@ export class TransaksiPage implements OnInit {
         loading.dismiss();
         this.myapp.presentAlert2('eror');
       }); 
+  }
+
+  
+
+  set_date(value:any){
+    this.tgl_awal=value.value.awal
+    this.tgl_akhir=value.value.akhir
+    // console.log(this.tgl_awal)
+    this.open_link()
   }
 
 }
