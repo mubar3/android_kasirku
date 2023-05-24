@@ -35,22 +35,45 @@
           <ion-input name="total" label="Pembeli" value="{{ item.nama }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
         </ion-label>
         <ion-label>
+          <!-- {{ subitem.nama }} -->
           <ion-input name="total" label="Total" value="{{ item.total_harga | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
         </ion-label>
         <ion-label>
           <!-- <ion-input name="total" label="Banyak" value="{{penjualan_barang[item.id]}}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input> -->
         </ion-label>
-        </ion-item>
-      <ion-item>
-        <div>
-          <!-- <ion-button color="danger" fill="solid" (click)="alert_kurang(item.id,item.nama)" >
-            kurang
-          </ion-button>
-          <ion-button fill="solid" (click)="alert_tambah(item.id,item.nama)" >
-            tambah
-          </ion-button> -->
-        </div>
       </ion-item>
+      <!-- <ion-item> -->
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <h5>Barang</h5>
+              </ion-col>
+              <ion-col>
+                <h5>Jumlah</h5>
+              </ion-col>
+              <ion-col>
+                <h5>Harga</h5>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+      <!-- </ion-item> -->
+      <div *ngFor="let subitem of item.barang" >
+        <!-- <ion-item> -->
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <p>{{ subitem.nama }}</p>
+                </ion-col>
+                <ion-col>
+                  <p>{{ subitem.jumlah }}</p>
+                </ion-col>
+                <ion-col>
+                  <p>{{ subitem.harga | currency:'Rp ':'symbol':'3.0' }}</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+        <!-- </ion-item> -->
+      </div>
     <!-- </div> -->
   </ion-card>
 </ion-content>
