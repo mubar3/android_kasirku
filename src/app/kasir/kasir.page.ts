@@ -195,10 +195,11 @@ export class KasirPage implements OnInit {
 
   async alert_simpan(){
     let data_simpan=this.data_simpan;
+    let harga_barang=this.harga_barang
     data_simpan=[];
     this.penjualan_barang.forEach(function (value,index) {
       if(value > 0){
-        data_simpan.push({id: index, banyak: value})
+        data_simpan.push({id: index, banyak: value, harga: harga_barang[index]})
       }
     })
     
