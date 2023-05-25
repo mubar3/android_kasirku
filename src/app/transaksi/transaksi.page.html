@@ -38,9 +38,7 @@
           <!-- {{ subitem.nama }} -->
           <ion-input name="total" label="Total" value="{{ item.total_harga | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
         </ion-label>
-        <ion-label>
-          <!-- <ion-input name="total" label="Banyak" value="{{penjualan_barang[item.id]}}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input> -->
-        </ion-label>
+        <ion-badge color="primary" slot="end">{{item.tanggal }} <br><br> {{item.waktu}}</ion-badge>
       </ion-item>
       <!-- <ion-item> -->
           <ion-grid>
