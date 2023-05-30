@@ -26,6 +26,8 @@ export class TransaksiPage implements OnInit {
   public keuntungan_kotor=0;
   public biaya_sewa=0;
   public total_gaji=0;
+  public penjualan=0;
+  public restok=0;
   public data_karyawan=([] as any[]);
 
   constructor(
@@ -131,8 +133,10 @@ export class TransaksiPage implements OnInit {
       .subscribe(data => {
         const response=JSON.parse(JSON.stringify(data))
         if(response.status){
-          // console.log(res)
+          console.log(response)
           this.hasil=response.hasil
+          this.penjualan=response.penjualan
+          this.restok=response.restok
           this.keuntungan_bersih=response.keuntungan_bersih
           this.keuntungan_kotor=response.keuntungan_kotor
           this.biaya_sewa=response.biaya_sewa

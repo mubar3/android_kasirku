@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  // baseUrl: 'http://localhost:8074/wskasirku/public/api',
-  baseUrl: 'https://wskasirku.mbshop.id/api',
+  baseUrl: 'http://localhost:8074/wskasirku/public/api',
+  // baseUrl: 'https://wskasirku.mbshop.id/api',
 };
 
 /*

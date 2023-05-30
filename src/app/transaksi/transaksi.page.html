@@ -18,17 +18,17 @@
           <ion-col>
             <ion-input  name="akhir" label="Akhir" [ngModel]="tgl_akhir" labelPlacement="stacked" placeholder="Enter text" type="date"></ion-input>
           </ion-col>
-          <div *ngIf="jenis == 'utama'">
-            <ion-col>
-              <ion-input  name="keuntungan" label="Keuntungan %" [ngModel]="keuntungan" labelPlacement="stacked" placeholder="Enter text" type="number"></ion-input>
-            </ion-col>
-          </div>
         </ion-row>
       </ion-grid>
       <ion-button  type="submit" fill="solid" >
         get
       </ion-button>
     </form>
+    <div *ngIf="jenis == 'utama'">
+      <ion-col>
+        <ion-input  label="Keuntungan %" [(ngModel)]="keuntungan" labelPlacement="stacked" placeholder="Enter text" ></ion-input>
+      </ion-col>
+    </div>
   </ion-item>
   <ion-row>
     <ion-col>
@@ -102,6 +102,16 @@
         <ion-label>
           <!-- {{ subitem.nama }} -->
           <ion-input name="total" label="Keuntungan bersih" value="{{ keuntungan_bersih | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+        </ion-label>
+        <!-- <ion-badge color="primary" slot="end">{{item.tanggal }} <br><br> {{item.waktu}}</ion-badge> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <ion-input label="Restok" value="{{ restok | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+        </ion-label>
+        <ion-label>
+          <!-- {{ subitem.nama }} -->
+          <ion-input label="Total penjualan" value="{{ penjualan | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
         </ion-label>
         <!-- <ion-badge color="primary" slot="end">{{item.tanggal }} <br><br> {{item.waktu}}</ion-badge> -->
       </ion-item>
