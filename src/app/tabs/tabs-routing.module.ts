@@ -29,6 +29,10 @@ const routes: Routes = [
         loadChildren: () => import('../transaksi/transaksi.module').then(m => m.TransaksiPageModule)
       },
       {
+        path: 'absensi',
+        loadChildren: () => import('../absensi/absensi.module').then(m => m.AbsensiPageModule)
+      },
+      {
         path: '',
         redirectTo: '/dashboard/tab1',
         pathMatch: 'full'

@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>absensi</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">absensi</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-row>
+    <ion-col>
+      <ion-button color="success" fill="solid" (click)="ngOnInit()" >
+        Refresh
+      </ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button color="primary" expand="block"   fill="solid" (click)="absen()" >
+        Absen Hari Ini
+      </ion-button>
+    </ion-col>
+  </ion-row>
+  <ion-card *ngFor="let item of datas" >
+    <ion-item >
+      <ion-label>{{item.tanggal}}</ion-label>
+      <ion-badge color="primary"  slot="end">{{item.status}}</ion-badge>
+    </ion-item>
+  </ion-card>
+</ion-content>

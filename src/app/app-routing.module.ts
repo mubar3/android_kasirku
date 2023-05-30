@@ -26,6 +26,10 @@ const routes: Routes = [
     path: 'transaksi',
     loadChildren: () => import('./transaksi/transaksi.module').then( m => m.TransaksiPageModule)
   },
+  {
+    path: 'absensi',
+    loadChildren: () => import('./absensi/absensi.module').then( m => m.AbsensiPageModule)
+  },
 ];
 @NgModule({
   imports: [

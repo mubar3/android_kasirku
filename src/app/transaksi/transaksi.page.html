@@ -18,6 +18,11 @@
           <ion-col>
             <ion-input  name="akhir" label="Akhir" [ngModel]="tgl_akhir" labelPlacement="stacked" placeholder="Enter text" type="date"></ion-input>
           </ion-col>
+          <div *ngIf="jenis == 'utama'">
+            <ion-col>
+              <ion-input  name="keuntungan" label="Keuntungan %" [ngModel]="keuntungan" labelPlacement="stacked" placeholder="Enter text" type="number"></ion-input>
+            </ion-col>
+          </div>
         </ion-row>
       </ion-grid>
       <ion-button  type="submit" fill="solid" >
@@ -25,10 +30,21 @@
       </ion-button>
     </form>
   </ion-item>
+  <ion-row>
+    <ion-col>
+      <ion-button color="success" fill="solid" (click)="ngOnInit()" >
+        Refresh
+      </ion-button>
+    </ion-col>
+    <ion-col>
+      <div *ngIf="jenis == 'utama'">
+        <ion-button expand="block" color="primary" fill="solid" (click)="report()" >
+          Report
+        </ion-button>
+      </div>
+    </ion-col>
+  </ion-row>
   
-  <ion-button color="success" fill="solid" (click)="ngOnInit()" >
-    Refresh
-  </ion-button>
   <ion-card *ngFor="let item of datas" >
     <!-- <div *ngIf="penjualan_barang[item.id] > 0"> -->
       <ion-item>
@@ -74,5 +90,66 @@
         <!-- </ion-item> -->
       </div>
     <!-- </div> -->
+  </ion-card>
+
+
+  <ion-card *ngIf="hasil != ''">
+    <!-- <div *ngIf="penjualan_barang[item.id] > 0"> -->
+      <ion-item>
+        <ion-label>
+          <ion-input label="Status" value="{{ hasil }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+        </ion-label>
+        <ion-label>
+          <!-- {{ subitem.nama }} -->
+          <ion-input name="total" label="Keuntungan bersih" value="{{ keuntungan_bersih | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+        </ion-label>
+        <!-- <ion-badge color="primary" slot="end">{{item.tanggal }} <br><br> {{item.waktu}}</ion-badge> -->
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <ion-input label="Keuntungan kotor" value="{{ keuntungan_kotor | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+        </ion-label>
+        <ion-label>
+          <ion-input label="Total gaji" value="{{ total_gaji | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+        </ion-label>
+        <ion-label>
+          <ion-input label="Biaya sewa" value="{{ biaya_sewa | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+        </ion-label>
+      </ion-item>
+      <!-- <ion-item> -->
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <h5>nama</h5>
+              </ion-col>
+              <ion-col>
+                <h5>Masuk</h5>
+              </ion-col>
+              <ion-col>
+                <h5>Libur</h5>
+              </ion-col>
+              <ion-col>
+                <h5>Gaji</h5>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+      <div *ngFor="let subitem of data_karyawan" >
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <p>{{ subitem.name }}</p>
+                </ion-col>
+                <ion-col>
+                  <p>{{ subitem.masuk }}</p>
+                </ion-col>
+                <ion-col>
+                  <p>{{ subitem.libur }}</p>
+                </ion-col>
+                <ion-col>
+                  <p>{{ subitem.gaji | currency:'Rp ':'symbol':'3.0' }}</p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+      </div>
   </ion-card>
 </ion-content>

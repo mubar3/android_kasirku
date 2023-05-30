@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { LoadingController} from '@ionic/angular';
 import { DatePipe } from '@angular/common';
@@ -9,24 +8,16 @@ import { Storage } from '@ionic/storage-angular';
 import { AlertController} from '@ionic/angular';
 
 @Component({
-  selector: 'app-transaksi',
-  templateUrl: './transaksi.page.html',
-  styleUrls: ['./transaksi.page.scss'],
+  selector: 'app-absensi',
+  templateUrl: './absensi.page.html',
+  styleUrls: ['./absensi.page.scss'],
 })
-export class TransaksiPage implements OnInit {
-  public tgl_awal=this.datepipe.transform(new Date(), 'yyyy-MM-dd');
+export class AbsensiPage implements OnInit {
+  public tgl_awal=this.datepipe.transform(new Date(new Date().getTime()  - (7*(24*60*60*1000))), 'yyyy-MM-dd');
   public tgl_akhir=this.datepipe.transform(new Date(), 'yyyy-MM-dd');
-  public datas=([] as any[]);
   private session='';
   public jenis='';
-  public total_harga=0;
-  public keuntungan=0;
-  public hasil='';
-  public keuntungan_bersih=0;
-  public keuntungan_kotor=0;
-  public biaya_sewa=0;
-  public total_gaji=0;
-  public data_karyawan=([] as any[]);
+  public datas=([] as any[]);
 
   constructor(
     private http: HttpClient,
@@ -36,17 +27,17 @@ export class TransaksiPage implements OnInit {
     private route: Router,
     private storage: Storage,
     private alertController: AlertController,
-    ) {
-      this.cek_login()
+    ) { 
       this.ngOnInit()  
-     }
+      
+    }
 
   ngOnInit() {
-    this.hasil=''
     this.cek_login()
     this.open_link()
+
   }
-    
+
   async cek_login(){
     this.session=await this.storage.get('session');
     this.jenis=await this.storage.get('jenis');
@@ -83,15 +74,10 @@ export class TransaksiPage implements OnInit {
       "tanggal_awal" : this.tgl_awal,
       "tanggal_akhir" : this.tgl_akhir,
     }
-    this.http.post(`${environment.baseUrl}`+'/get_transaksi',parameter,{})
+    this.http.post(`${environment.baseUrl}`+'/get_absen',parameter,{})
       .subscribe(data => {
         const response=JSON.parse(JSON.stringify(data))
         if(response.status){
-          this.total_harga=0
-          Object.keys(response.data).forEach((elt, index)=>{
-            this.total_harga=this.total_harga + ( response.data[elt]['total_harga'] )
-          })
-          
           loading.dismiss();
           this.datas=response.data
         }else{
@@ -104,17 +90,7 @@ export class TransaksiPage implements OnInit {
       }); 
   }
 
-  
-
-  set_date(value:any){
-    this.tgl_awal=value.value.awal
-    this.tgl_akhir=value.value.akhir
-    // console.log(this.tgl_awal)
-    this.open_link()
-  }
-
-  async report(){
-    this.datas=[]
+  async absen(){
     const loading = await this.loadingCtrl.create({
       message: 'Loading..',
       spinner: 'bubbles',
@@ -123,21 +99,14 @@ export class TransaksiPage implements OnInit {
 
     let parameter={
       "session" : this.session,
-      "tanggal_awal" : this.tgl_awal,
-      "tanggal_akhir" : this.tgl_akhir,
-      "keuntungan" : this.keuntungan,
+      "tanggal" : this.tgl_akhir,
+      "status" : "masuk",
     }
-    this.http.post(`${environment.baseUrl}`+'/report',parameter,{})
+    this.http.post(`${environment.baseUrl}`+'/add_absensi',parameter,{})
       .subscribe(data => {
         const response=JSON.parse(JSON.stringify(data))
         if(response.status){
-          // console.log(res)
-          this.hasil=response.hasil
-          this.keuntungan_bersih=response.keuntungan_bersih
-          this.keuntungan_kotor=response.keuntungan_kotor
-          this.biaya_sewa=response.biaya_sewa
-          this.total_gaji=response.total_gaji
-          this.data_karyawan=response.data_karyawan
+          this.ngOnInit()  
           loading.dismiss();
         }else{
           loading.dismiss();
@@ -147,6 +116,7 @@ export class TransaksiPage implements OnInit {
         loading.dismiss();
         this.myapp.presentAlert2('eror');
       }); 
+
   }
 
 }
