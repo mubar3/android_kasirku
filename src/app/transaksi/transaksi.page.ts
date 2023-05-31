@@ -20,7 +20,8 @@ export class TransaksiPage implements OnInit {
   private session='';
   public jenis='';
   public total_harga=0;
-  public keuntungan=0;
+  public keuntungan=50;
+  public uang_dibawa=0;
   public hasil='';
   public keuntungan_bersih=0;
   public keuntungan_kotor=0;

@@ -28,6 +28,9 @@
       <ion-col>
         <ion-input  label="Keuntungan %" [(ngModel)]="keuntungan" labelPlacement="stacked" placeholder="Enter text" ></ion-input>
       </ion-col>
+      <ion-col>
+        <ion-input  label="Uang dibawa Rp" [(ngModel)]="uang_dibawa" labelPlacement="stacked" placeholder="Enter text" ></ion-input>
+      </ion-col>
     </div>
   </ion-item>
   <ion-row>
@@ -112,6 +115,10 @@
         <ion-label>
           <!-- {{ subitem.nama }} -->
           <ion-input label="Total penjualan" value="{{ penjualan | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+        </ion-label>
+        <ion-label>
+          <!-- {{ subitem.nama }} -->
+          <ion-input label="Total cash" value="{{ penjualan-uang_dibawa | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
         </ion-label>
         <!-- <ion-badge color="primary" slot="end">{{item.tanggal }} <br><br> {{item.waktu}}</ion-badge> -->
       </ion-item>
