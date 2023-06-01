@@ -17,6 +17,7 @@ export class TransaksiPage implements OnInit {
   public tgl_awal=this.datepipe.transform(new Date(), 'yyyy-MM-dd');
   public tgl_akhir=this.datepipe.transform(new Date(), 'yyyy-MM-dd');
   public datas=([] as any[]);
+  public reports=([] as any[]);
   private session='';
   public jenis='';
   public total_harga=0;
@@ -30,6 +31,9 @@ export class TransaksiPage implements OnInit {
   public penjualan=0;
   public restok=0;
   public data_karyawan=([] as any[]);
+  private toko_id='';
+  public tagihan_gaji=0;
+  public gaji_sewa=([] as any[]);
 
   constructor(
     private http: HttpClient,
@@ -46,6 +50,7 @@ export class TransaksiPage implements OnInit {
 
   ngOnInit() {
     this.hasil=''
+    this.reports=[]
     this.cek_login()
     this.open_link()
   }
@@ -53,6 +58,7 @@ export class TransaksiPage implements OnInit {
   async cek_login(){
     this.session=await this.storage.get('session');
     this.jenis=await this.storage.get('jenis');
+    this.toko_id=await this.storage.get('toko_id');
     // console.log(this.jenis)
     if(this.session != ''){
 
@@ -118,6 +124,7 @@ export class TransaksiPage implements OnInit {
 
   async report(){
     this.datas=[]
+    this.reports=[]
     const loading = await this.loadingCtrl.create({
       message: 'Loading..',
       spinner: 'bubbles',
@@ -134,7 +141,7 @@ export class TransaksiPage implements OnInit {
       .subscribe(data => {
         const response=JSON.parse(JSON.stringify(data))
         if(response.status){
-          console.log(response)
+          // console.log(response)
           this.hasil=response.hasil
           this.penjualan=response.penjualan
           this.restok=response.restok
@@ -152,6 +159,214 @@ export class TransaksiPage implements OnInit {
         loading.dismiss();
         this.myapp.presentAlert2('eror');
       }); 
+  }
+  
+  async save_report(){
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading..',
+      spinner: 'bubbles',
+    });
+    await loading.present();
+
+    let parameter={
+      "session" : this.session,
+      'tgl_awal' : this.tgl_awal,
+      'tgl_akhir' : this.tgl_akhir,
+      'status' : this.hasil,
+      'keuntungan_kotor' : this.keuntungan_kotor,
+      'keuntungan_bersih' : this.keuntungan_bersih,
+      'total_penjualan' : this.penjualan,
+      'restok' : this.restok,
+      'gaji_sewa' : this.total_gaji + this.biaya_sewa,
+      'total_gaji' : this.total_gaji,
+      'biaya_sewa' : this.biaya_sewa,
+      'karyawan' : JSON.stringify(this.data_karyawan),
+    }
+    this.http.post(`${environment.baseUrl}`+'/save_report',parameter,{})
+      .subscribe(data => {
+        const response=JSON.parse(JSON.stringify(data))
+        if(response.status){
+          loading.dismiss();
+          this.myapp.presentToast_copy('bottom','Berhasil Simpan')
+        }else{
+          loading.dismiss();
+          this.myapp.presentAlert2(JSON.stringify(response.message));
+        }
+      },error=>{
+        loading.dismiss();
+        this.myapp.presentAlert2('eror');
+      });  
+  }
+
+  async get_report(){
+    this.hasil=''
+    this.datas=[]
+    this.tagihan_gaji=0
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading..',
+      spinner: 'bubbles',
+    });
+    await loading.present();
+
+    let parameter={
+      "session" : this.session,
+      "tgl_awal" : this.tgl_awal,
+      "tgl_akhir" : this.tgl_akhir,
+      "toko_id" : this.toko_id,
+    }
+    this.http.post(`${environment.baseUrl}`+'/get_report',parameter,{})
+      .subscribe(data => {
+        const response=JSON.parse(JSON.stringify(data))
+        if(response.status){
+          Object.keys(response.data).forEach((elt, index)=>{
+            this.gaji_sewa[response.data[elt]['id']]=Number(response.data[elt]['total_gaji']) + Number(response.data[elt]['biaya_sewa'])
+            Object.keys(response.data[elt]['karyawan']).forEach((elt2, index)=>{
+              if(response.data[elt]['karyawan'][elt2]['bayar'] == 'n'){
+                  this.tagihan_gaji+=Number(response.data[elt]['karyawan'][elt2]['jumlah'])
+              }
+            })
+          })
+          this.reports=response.data
+          loading.dismiss();
+        }else{
+          loading.dismiss();
+          this.myapp.presentAlert2(JSON.stringify(response.message));
+        }
+      },error=>{
+        loading.dismiss();
+        this.myapp.presentAlert2('eror');
+      }); 
+  }
+
+  
+
+  async alert_delreport(id:any){
+    const alert = await this.alertController.create({
+      header: 'Alert',
+      // subHeader: 'Invalid number!',
+      message: 'Data akan dihapus?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            // console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.del_report(id)
+            // console.log('Yes clicked');
+          }
+        }]
+    });
+    await alert.present();
+  }
+  
+  async del_report(id:any){
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading..',
+      spinner: 'bubbles',
+    });
+    await loading.present();
+
+    let parameter={
+      "session" : this.session,
+      'id_report' : id,
+    }
+    this.http.post(`${environment.baseUrl}`+'/del_report',parameter,{})
+      .subscribe(data => {
+        const response=JSON.parse(JSON.stringify(data))
+        if(response.status){
+          loading.dismiss();
+          this.myapp.presentToast_copy('bottom','Berhasil Hapus Report')
+          this.get_report()
+        }else{
+          loading.dismiss();
+          this.myapp.presentAlert2(JSON.stringify(response.message));
+        }
+      },error=>{
+        loading.dismiss();
+        this.myapp.presentAlert2('eror');
+      });  
+  }
+
+  async bayarkan(id:any,jenis:any){
+    const alert = await this.alertController.create({
+      header: 'Alert',
+      // subHeader: 'Invalid number!',
+      message: 'Yakin sudah dibayar?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            // console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.bayar(id,jenis)
+            // console.log('Yes clicked');
+          }
+        }]
+    });
+    await alert.present();
+  }
+
+  async batal_bayarkan(id:any,jenis:any){
+    const alert = await this.alertController.create({
+      header: 'Alert',
+      // subHeader: 'Invalid number!',
+      message: 'Yakin belum dibayar?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            // console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.bayar(id,jenis)
+            // console.log('Yes clicked');
+          }
+        }]
+    });
+    await alert.present();
+  }
+  
+  async bayar(id:any,jenis:any){
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading..',
+      spinner: 'bubbles',
+    });
+    await loading.present();
+
+    let parameter={
+      "session" : this.session,
+      'id_gajireport' : id,
+      'jenis' : jenis,
+    }
+    this.http.post(`${environment.baseUrl}`+'/endis_gaji',parameter,{})
+      .subscribe(data => {
+        const response=JSON.parse(JSON.stringify(data))
+        if(response.status){
+          loading.dismiss();
+          this.myapp.presentToast_copy('bottom','Berhasil Penggajian')
+          this.get_report()
+        }else{
+          loading.dismiss();
+          this.myapp.presentAlert2(JSON.stringify(response.message));
+        }
+      },error=>{
+        loading.dismiss();
+        this.myapp.presentAlert2('eror');
+      });  
   }
 
 }
