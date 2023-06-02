@@ -9,21 +9,21 @@
 <ion-content [fullscreen]="true">
   <!-- <ion-item *ngIf="jenis == 'utama'"> -->
   <ion-item>
-    <form  #form="ngForm" (ngSubmit)="set_date(form)">
+    <!-- <form  #form="ngForm" (ngSubmit)="set_date(form)"> -->
       <ion-grid>
         <ion-row>
           <ion-col>
-            <ion-input name="awal" label="Awal" [ngModel]="tgl_awal" labelPlacement="stacked" placeholder="Enter text" type="date"></ion-input>
+            <ion-input label="Awal" [(ngModel)]="tgl_awal" labelPlacement="stacked" placeholder="Enter text" type="date"></ion-input>
           </ion-col>
           <ion-col>
-            <ion-input  name="akhir" label="Akhir" [ngModel]="tgl_akhir" labelPlacement="stacked" placeholder="Enter text" type="date"></ion-input>
+            <ion-input  label="Akhir" [(ngModel)]="tgl_akhir" labelPlacement="stacked" placeholder="Enter text" type="date"></ion-input>
           </ion-col>
         </ion-row>
       </ion-grid>
-      <ion-button  type="submit" fill="solid" >
+      <!-- <ion-button  type="submit" fill="solid" (click)="ngOnInit()" >
         get
-      </ion-button>
-    </form>
+      </ion-button> -->
+    <!-- </form> -->
     <div *ngIf="jenis == 'utama'">
       <ion-col>
         <ion-input  label="Keuntungan %" [(ngModel)]="keuntungan" labelPlacement="stacked" placeholder="Enter text" ></ion-input>
@@ -185,11 +185,13 @@
       <ion-accordion value="first">
         <ion-item slot="header" color="light">
           <ion-label>
-            {{ item.tgl_awal }} - {{ item.tgl_akhir }}
+            {{ item.tgl_awal }} -- {{ item.tgl_akhir }}
       
             
             
           </ion-label>
+          <ion-badge color="success" slot="end" *ngIf="item.status == 'untung' " >{{ item.status }}</ion-badge>
+          <ion-badge color="danger" slot="end" *ngIf="item.status == 'tombok' " >{{ item.status }}</ion-badge>
         </ion-item>
         
         <ion-item slot="header" color="light">
