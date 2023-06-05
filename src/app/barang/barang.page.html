@@ -92,9 +92,17 @@
       <ion-accordion-group *ngFor="let item of absensi" >
         <ion-accordion value="first">
           <ion-item slot="header" color="light">
-            <ion-label>{{item.tanggal}}</ion-label>
-            <ion-label>{{item.name}}</ion-label>
-            <ion-badge color="primary"  slot="end">{{item.status}}</ion-badge>
+            <ion-row>
+              <ion-col>
+                <ion-label>{{item.name}}</ion-label>
+              </ion-col>
+              <ion-col>
+                <!-- <ion-label>{{item.tanggal}}</ion-label> -->
+              </ion-col>
+            </ion-row>
+            <ion-badge color="primary"  slot="end" >{{item.tanggal}}</ion-badge>
+            <ion-badge color="primary"  slot="end" *ngIf="item.status == 'masuk'" ><ion-icon name="checkmark-done-circle-outline"></ion-icon></ion-badge>
+            <ion-badge color="danger"  slot="end" *ngIf="item.status == 'libur'" ><ion-icon name="warning-outline"></ion-icon></ion-badge>
           </ion-item>
           
           <div class="ion-padding" slot="content">
