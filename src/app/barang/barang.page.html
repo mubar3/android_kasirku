@@ -37,6 +37,9 @@
         </ion-button>
       </ion-col>
       <ion-col>
+        <ion-button color="primary" fill="solid" (click)="get_absensi()" >
+          Absensi
+        </ion-button>
       </ion-col>
       <ion-col>
         <ion-button color="primary" fill="solid" (click)="tambah_barang()" >
@@ -84,6 +87,24 @@
           </ion-grid>
         </ion-item>
         </form>
+        
       </ion-card>
+      <ion-accordion-group *ngFor="let item of absensi" >
+        <ion-accordion value="first">
+          <ion-item slot="header" color="light">
+            <ion-label>{{item.tanggal}}</ion-label>
+            <ion-label>{{item.name}}</ion-label>
+            <ion-badge color="primary"  slot="end">{{item.status}}</ion-badge>
+          </ion-item>
+          
+          <div class="ion-padding" slot="content">
+            <div *ngIf="item.foto != null && item.foto != ''">
+              <ion-img
+                src="{{ item.foto }}"
+              ></ion-img>
+            </div>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
     </ion-content>
     

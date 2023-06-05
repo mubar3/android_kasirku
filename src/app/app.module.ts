@@ -10,7 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { Drivers } from '@ionic/storage';
 import { IonicStorageModule } from '@ionic/storage-angular';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
+import { Camera } from '@ionic-native/camera/ngx';  
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +27,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         ],
       ],
   providers: [
+    Camera,  
     DatePipe,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

@@ -6,13 +6,25 @@ import {AppComponent} from '../app.component';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage-angular';
 import { AlertController} from '@ionic/angular';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';  
 
 @Component({
   selector: 'app-absensi',
   templateUrl: './absensi.page.html',
   styleUrls: ['./absensi.page.scss'],
 })
-export class AbsensiPage implements OnInit {
+export class AbsensiPage implements OnInit { 
+  
+  public capturedSnapURL='';  
+  
+  cameraOptions: CameraOptions = {  
+    quality: 20,  
+    destinationType: this.camera.DestinationType.DATA_URL,  
+    encodingType: this.camera.EncodingType.JPEG,  
+    mediaType: this.camera.MediaType.PICTURE,
+    cameraDirection: this.camera.Direction.FRONT
+  };  
+  
   public tgl_awal=this.datepipe.transform(new Date(new Date().getTime()  - (7*(24*60*60*1000))), 'yyyy-MM-dd');
   public tgl_akhir=this.datepipe.transform(new Date(), 'yyyy-MM-dd');
   private session='';
@@ -20,6 +32,7 @@ export class AbsensiPage implements OnInit {
   public datas=([] as any[]);
 
   constructor(
+    private camera: Camera,
     private http: HttpClient,
     public datepipe: DatePipe,
     private loadingCtrl: LoadingController,
@@ -101,6 +114,7 @@ export class AbsensiPage implements OnInit {
       "session" : this.session,
       "tanggal" : this.tgl_akhir,
       "status" : "masuk",
+      "foto" : this.capturedSnapURL,
     }
     this.http.post(`${environment.baseUrl}`+'/add_absensi',parameter,{})
       .subscribe(data => {
@@ -118,5 +132,21 @@ export class AbsensiPage implements OnInit {
       }); 
 
   }
+  
+  takeSnap() {  
+    this.camera.getPicture(this.cameraOptions).then((imageData) => {  
+      // this.camera.DestinationType.FILE_URI gives file URI saved in local  
+      // this.camera.DestinationType.DATA_URL gives base64 URI  
+  
+      const base64Image = 'data:image/jpeg;base64,' + imageData;  
+      this.capturedSnapURL = base64Image;
+      this.absen()  
+      // console.log(base64Image)
+    }, (err) => {  
+  
+      console.log(err);  
+      // Handle error  
+    });  
+  }  
 
 }

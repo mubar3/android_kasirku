@@ -17,10 +17,16 @@
       </ion-button>
     </ion-col>
     <ion-col>
-      <ion-button color="primary" expand="block"   fill="solid" (click)="absen()" >
+      <!-- <ion-button color="primary" expand="block"   fill="solid" (click)="absen()" > -->
+      <ion-button color="primary" expand="block"   fill="solid" (click)="takeSnap()" >
         Absen Hari Ini
       </ion-button>
     </ion-col>
+    <!-- <ion-col>
+      <ion-button (click)="takeSnap()">  
+        Click Image  
+      </ion-button> 
+    </ion-col> -->
   </ion-row>
   <ion-card *ngFor="let item of datas" >
     <ion-item >

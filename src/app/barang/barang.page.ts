@@ -13,9 +13,12 @@ import { AlertController} from '@ionic/angular';
   styleUrls: ['./barang.page.scss'],
 })
 export class BarangPage implements OnInit {
+  public tgl_awal=this.datepipe.transform(new Date(new Date().getTime()  - (7*(24*60*60*1000))), 'yyyy-MM-dd');
+  public tgl_akhir=this.datepipe.transform(new Date(), 'yyyy-MM-dd');
   private session='';
   private toko_id='';
   public status=false;
+  public absensi=([] as any[]);
   public datas_barang=([] as any[]);
   public jumlah_datas=0;
   public nama='';
@@ -47,6 +50,7 @@ export class BarangPage implements OnInit {
   }
   
   async open_link(){
+    this.absensi=[]
     const loading = await this.loadingCtrl.create({
       message: 'Loading..',
       spinner: 'bubbles',
@@ -284,4 +288,34 @@ export class BarangPage implements OnInit {
         this.open_link()
       }); 
   }  
+
+  async get_absensi(){
+    this.datas_barang=[]
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading..',
+      spinner: 'bubbles',
+    });
+    await loading.present();
+
+    let parameter={
+      "session" : this.session,
+      "tanggal_awal" : this.tgl_awal,
+      "tanggal_akhir" : this.tgl_akhir,
+    }
+    this.http.post(`${environment.baseUrl}`+'/get_absen_all',parameter,{})
+      .subscribe(data => {
+        const response=JSON.parse(JSON.stringify(data))
+        if(response.status){
+          this.absensi=response.data
+          console.log(response.data)
+          loading.dismiss();
+        }else{
+          loading.dismiss();
+          this.myapp.presentAlert2(JSON.stringify(response.message));
+        }
+      },error=>{
+        loading.dismiss();
+        this.myapp.presentAlert2('eror');
+      }); 
+  }
 }
