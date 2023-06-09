@@ -9,7 +9,11 @@ Kasirku
 <a href="https://mbshop.id"><img src="readme/1 (2).jpg" width="200"></a>
 <a href="https://mbshop.id"><img src="readme/1 (3).jpg" width="200"></a>
 <a href="https://mbshop.id"><img src="readme/1 (4).jpg" width="200"></a>
-<a href="https://mbshop.id"><img src="readme/2 (1).jpg" width="200"></a>
-<a href="https://mbshop.id"><img src="readme/2 (2).jpg" width="200"></a>
-<a href="https://mbshop.id"><img src="readme/2 (3).jpg" width="200"></a>
+<a href="https://mbshop.id"><img src="readme/1 (5).jpg" width="200"></a>
+<a href="https://mbshop.id"><img src="readme/1 (6).jpg" width="200"></a>
+<a href="https://mbshop.id"><img src="readme/1 (7).jpg" width="200"></a>
+<a href="https://mbshop.id"><img src="readme/1 (8).jpg" width="200"></a>
+<a href="https://mbshop.id"><img src="readme/1 (9).jpg" width="200"></a>
+<a href="https://mbshop.id"><img src="readme/1 (10).jpg" width="200"></a>
+<a href="https://mbshop.id"><img src="readme/1 (11).jpg" width="200"></a>
 </p>

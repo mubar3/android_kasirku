@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage-angular';
 import { AlertController, ToastController } from '@ionic/angular';
+import {Platform} from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,10 @@ export class AppComponent {
     private toastController: ToastController,
     private alertController: AlertController,
     private storage: Storage,
+    private platform: Platform
     ) {
       this.init()
+      this.initializeApp()
     }
 
   async init() {
@@ -58,5 +61,12 @@ export class AppComponent {
     });
 
     await toast.present();
+  }
+  async initializeApp(): Promise<void> {
+    await this.platform.ready();
+   
+    this.platform.backButton.subscribeWithPriority(1, () => { // to disable hardware back button on whole app
+    });
+
   }
 }

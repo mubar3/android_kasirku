@@ -6,6 +6,7 @@ import {AppComponent} from '../app.component';
 import { LoadingController} from '@ionic/angular';
 import { DatePipe } from '@angular/common';
 import { AlertController} from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-barang',
@@ -35,18 +36,35 @@ export class BarangPage implements OnInit {
     public myapp: AppComponent,
     private loadingCtrl: LoadingController,
     public datepipe: DatePipe,
+    private route: Router,
     private alertController: AlertController,
     ) {
-      this.cek_login()
-      this.open_link()
+      this.ngOnInit()  
      }
 
   ngOnInit() {
+    this.cek_login()
   }
 
   async cek_login(){
     this.session=await this.storage.get('session');
     this.toko_id=await this.storage.get('toko_id');
+    if(this.session != ''){
+
+      let parameter={
+        "session" : this.session
+      }
+      this.http.post(`${environment.baseUrl}`+'/get_barang_new',parameter,{})
+      .subscribe(data => {
+          const response=JSON.parse(JSON.stringify(data))
+          if(!response.status){
+            this.route.navigate(['/']);
+          }
+        });  
+    }else{
+        this.route.navigate(['/']);
+    }
+    this.open_link()
   }
   
   async open_link(){
