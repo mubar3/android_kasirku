@@ -54,6 +54,11 @@
         </ion-button>
       </ion-col>
       <ion-col>
+        <ion-button color="primary" fill="solid" (click)="get_bahan()" >
+          Bahan
+        </ion-button>
+      </ion-col>
+      <ion-col>
         <ion-button color="primary" fill="solid" (click)="tambah_barang()" >
           Tambah
         </ion-button>
@@ -98,9 +103,44 @@
             </ion-row>
           </ion-grid>
         </ion-item>
-        </form>
+    </form>
+    
+  </ion-card>
+
+  
+  <ion-card *ngFor="let item of datas_bahan; index as i" >
+    <form  #form="ngForm" (ngSubmit)="alert_updatebahan(form,i,item.id)">
+      <ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-input name="nama"  label="Nama" [ngModel]="namabahan_update[i]" [ngModelOptions]="{standalone: false}" labelPlacement="stacked" placeholder="Enter text"></ion-input>
+            </ion-col>
+            <ion-col>
+              <ion-input name="stok"  label="Sisa / Tambah stok (Gr)" [ngModel]="banyakbahan_update[i]" [ngModelOptions]="{standalone: false}"  labelPlacement="stacked" placeholder="0"></ion-input>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <ion-item>
         
-      </ion-card>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-text>{{ ketbahan_update[i] }}</ion-text>
+            </ion-col>
+            <ion-col>
+                <ion-button type="submit" color="primary" fill="solid" >
+                  Update
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+    </form>
+    
+  </ion-card>
+
       <ion-accordion-group *ngFor="let item of absensi" >
         <ion-accordion value="first">
           <ion-item slot="header" color="light">

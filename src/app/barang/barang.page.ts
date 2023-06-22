@@ -21,7 +21,9 @@ export class BarangPage implements OnInit {
   public status=false;
   public absensi=([] as any[]);
   public datas_barang=([] as any[]);
+  public datas_bahan=([] as any[]);
   public jumlah_datas=0;
+  public jumlah_bahan=0;
   public nama='';
   public harga='';
   public stok='';
@@ -29,6 +31,10 @@ export class BarangPage implements OnInit {
   public nama_update=([] as any[]);
   public harga_update=([] as any[]);
   public stok_update=([] as any[]);
+  public idbahan_update=([] as any[]);
+  public namabahan_update=([] as any[]);
+  public banyakbahan_update=([] as any[]);
+  public ketbahan_update=([] as any[]);
 
   constructor(
     private storage: Storage,
@@ -69,6 +75,7 @@ export class BarangPage implements OnInit {
   
   async open_link(){
     this.absensi=[]
+    this.datas_bahan=[]
     const loading = await this.loadingCtrl.create({
       message: 'Loading..',
       spinner: 'bubbles',
@@ -309,6 +316,7 @@ export class BarangPage implements OnInit {
 
   async get_absensi(){
     this.datas_barang=[]
+    this.datas_bahan=[]
     const loading = await this.loadingCtrl.create({
       message: 'Loading..',
       spinner: 'bubbles',
@@ -336,4 +344,98 @@ export class BarangPage implements OnInit {
         this.myapp.presentAlert2('eror');
       }); 
   }
+
+  async get_bahan(){
+    this.absensi=[]
+    this.datas_barang=[]
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading..',
+      spinner: 'bubbles',
+    });
+    await loading.present();
+
+    let parameter={
+      "session" : this.session,
+    }
+    this.http.post(`${environment.baseUrl}`+'/get_bahan',parameter,{})
+      .subscribe(data => {
+        const response=JSON.parse(JSON.stringify(data))
+        if(response.status){
+          Object.keys(response.data).forEach((elt, index)=>{
+              this.idbahan_update[index] = response.data[elt]['id'] ;
+              this.namabahan_update[index] = response.data[elt]['nama'] ;
+              this.banyakbahan_update[index] = response.data[elt]['stok_gr'] ;
+              this.ketbahan_update[index] = response.data[elt]['ket'] ;
+              this.jumlah_bahan++
+          })
+          loading.dismiss();
+          this.datas_bahan=response.data
+        }else{
+          loading.dismiss();
+          this.myapp.presentAlert2(JSON.stringify(response.message));
+        }
+      },error=>{
+        loading.dismiss();
+        this.myapp.presentAlert2('eror');
+      });  
+  }
+
+  async alert_updatebahan(value:any,i:any,bahan_id:any){
+    // console.log(value.value)
+    // console.log(bahan_id)
+    const alert = await this.alertController.create({
+      header: 'Alert',
+      // subHeader: 'Invalid number!',
+      message: 'Yakin tambah stok?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            // console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.update_bahan(bahan_id, value.value.nama,value.value.stok)
+            // console.log('Yes clicked');
+          }
+        }]
+    });
+    await alert.present();
+  }
+
+  async update_bahan(bahan_id:any,nama:any,banyak:any){
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading..',
+      spinner: 'bubbles',
+    });
+    await loading.present();
+
+    let parameter={
+      "session" : this.session,
+      "bahan_id" : bahan_id,
+      "nama" : nama,
+      "banyak" : banyak,
+      "ket" : null,
+    }
+    this.http.post(`${environment.baseUrl}`+'/update_bahan',parameter,{})
+      .subscribe(data => {
+        const response=JSON.parse(JSON.stringify(data))
+        if(response.status){
+          loading.dismiss();
+          this.myapp.presentToast_copy('bottom','Berhasil diupdate')
+        }else{
+          loading.dismiss();
+          this.myapp.presentAlert2(JSON.stringify(response.message));
+        }
+        this.get_bahan()
+      },error=>{
+        loading.dismiss();
+        this.myapp.presentAlert2('eror');
+        this.get_bahan()
+      }); 
+  }  
+
 }
