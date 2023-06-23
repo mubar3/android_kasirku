@@ -31,7 +31,17 @@
   <ion-card *ngFor="let item of datas" >
     <ion-item >
       <ion-label>{{item.tanggal}}</ion-label>
-      <ion-badge color="primary"  slot="end">{{item.status}}</ion-badge>
+      <div>
+        <ion-badge color="primary"  slot="end">{{item.status}}</ion-badge>
+      </div><div>
+        <ion-badge color="primary"  slot="end">-</ion-badge>
+      </div>
+      <div *ngIf="!item.updated_at">
+        <ion-badge color="danger"  slot="end">Belum pulang</ion-badge>
+      </div>
+      <div *ngIf="item.updated_at">
+        <ion-badge color="primary"  slot="end">Pulang</ion-badge>
+      </div>
     </ion-item>
   </ion-card>
 </ion-content>
