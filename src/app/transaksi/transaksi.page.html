@@ -178,9 +178,45 @@
   </ion-card>
   
   <ion-card *ngIf="reports.length > 0">
-    <ion-button expand="block" color="danger" fill="solid">
-      Tagihan gaji : {{tagihan_gaji  | currency:'Rp ':'symbol':'3.0' }}
-    </ion-button>
+    <ion-accordion-group>
+      <ion-accordion value="all">
+        <ion-item slot="header" color="light">
+        <ion-button expand="block" color="danger" fill="solid">
+          Total Tagihan gaji : {{tagihan_gaji  | currency:'Rp ':'symbol':'3.0' }}
+        </ion-button>
+      </ion-item>
+        <div class="ion-padding" slot="content">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <h5>nama</h5>
+              </ion-col>
+              <ion-col>
+                <h5>Gaji</h5>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          <div *ngFor="let item of data_gaji_karyawan" >
+            <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <p>{{ item.nama }}</p>
+                </ion-col>
+                <ion-col>
+                  <p>{{ item.gaji }}</p>
+                </ion-col>
+                <ion-col>
+                </ion-col>
+                  <ion-button expand="block" color="success" fill="solid" (click)="bayarkan_date(item.id,'sudah')" >
+                    Bayarkan
+                  </ion-button>
+              </ion-row>
+            </ion-grid>
+          </div>
+
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
     <ion-accordion-group *ngFor="let item of reports" >
       <ion-accordion value="first">
         <ion-item slot="header" color="light">

@@ -34,6 +34,9 @@ export class TransaksiPage implements OnInit {
   private toko_id='';
   public tagihan_gaji=0;
   public gaji_sewa=([] as any[]);
+  public gaji_karyawan=([] as any[]);
+  public id_karyawan=([] as any[]);
+  public data_gaji_karyawan=([] as any[]);
 
   constructor(
     private http: HttpClient,
@@ -201,6 +204,9 @@ export class TransaksiPage implements OnInit {
   async get_report(){
     this.hasil=''
     this.datas=[]
+    this.gaji_karyawan=[]
+    this.id_karyawan=[]
+    this.data_gaji_karyawan=[]
     this.tagihan_gaji=0
     const loading = await this.loadingCtrl.create({
       message: 'Loading..',
@@ -220,12 +226,30 @@ export class TransaksiPage implements OnInit {
         if(response.status){
           Object.keys(response.data).forEach((elt, index)=>{
             this.gaji_sewa[response.data[elt]['id']]=Number(response.data[elt]['total_gaji']) + Number(response.data[elt]['biaya_sewa'])
+            // console.log(response)
             Object.keys(response.data[elt]['karyawan']).forEach((elt2, index)=>{
               if(response.data[elt]['karyawan'][elt2]['bayar'] == 'n'){
+                  if(this.gaji_karyawan.hasOwnProperty(this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['name']])){
+                    this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']]=Number(this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']])+response.data[elt]['karyawan'][elt2]['jumlah']
+                  }else{
+                    this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']]=response.data[elt]['karyawan'][elt2]['jumlah']
+                  }
+                  this.id_karyawan[response.data[elt]['karyawan'][elt2]['user_id']]=response.data[elt]['karyawan'][elt2]['name']
                   this.tagihan_gaji+=Number(response.data[elt]['karyawan'][elt2]['jumlah'])
               }
             })
           })
+          var urut=0
+          for (const [key, value] of Object.entries(this.gaji_karyawan)) {
+              const cek={
+                'id' : key,
+                'nama' : this.id_karyawan[Number(key)],
+                'gaji' : value
+              }
+              this.data_gaji_karyawan[urut]=cek
+              urut=urut+1
+          }
+          // console.log(this.data_gaji_karyawan)
           this.reports=response.data
           loading.dismiss();
         }else{
@@ -314,6 +338,63 @@ export class TransaksiPage implements OnInit {
         }]
     });
     await alert.present();
+  }
+
+  
+
+  async bayarkan_date(id:any,jenis:any){
+    const alert = await this.alertController.create({
+      header: 'Alert',
+      // subHeader: 'Invalid number!',
+      message: 'Yakin sudah dibayar?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            // console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.bayar_date(id,jenis)
+            // console.log('Yes clicked');
+          }
+        }]
+    });
+    await alert.present();
+  }
+  
+  async bayar_date(id:any,jenis:any){
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading..',
+      spinner: 'bubbles',
+    });
+    await loading.present();
+
+    let parameter={
+      "session" : this.session,
+      'id_karyawan' : id,
+      'tgl_awal' : this.tgl_awal,
+      'tgl_akhir' : this.tgl_akhir,
+      'jenis' : jenis,
+    }
+    this.http.post(`${environment.baseUrl}`+'/endis_gaji_date',parameter,{})
+      .subscribe(data => {
+        const response=JSON.parse(JSON.stringify(data))
+        if(response.status){
+          loading.dismiss();
+          this.myapp.presentToast_copy('bottom','Berhasil Penggajian')
+          this.get_report()
+        }else{
+          loading.dismiss();
+          this.myapp.presentAlert2(JSON.stringify(response.message));
+        }
+      },error=>{
+        loading.dismiss();
+        this.myapp.presentAlert2('eror');
+      });  
   }
 
   async batal_bayarkan(id:any,jenis:any){
