@@ -229,8 +229,9 @@ export class TransaksiPage implements OnInit {
             // console.log(response)
             Object.keys(response.data[elt]['karyawan']).forEach((elt2, index)=>{
               if(response.data[elt]['karyawan'][elt2]['bayar'] == 'n'){
-                  if(this.gaji_karyawan.hasOwnProperty(this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['name']])){
-                    this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']]=Number(this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']])+response.data[elt]['karyawan'][elt2]['jumlah']
+                  if(this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']] !== undefined){
+                    this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']]=Number(this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']])+Number(response.data[elt]['karyawan'][elt2]['jumlah'])
+                    console.log(this.gaji_karyawan)
                   }else{
                     this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']]=response.data[elt]['karyawan'][elt2]['jumlah']
                   }

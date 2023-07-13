@@ -203,14 +203,12 @@
                   <p>{{ item.nama }}</p>
                 </ion-col>
                 <ion-col>
-                  <p>{{ item.gaji }}</p>
+                  <p>{{ item.gaji | currency:'Rp ':'symbol':'3.0' }}</p>
                 </ion-col>
-                <ion-col>
-                </ion-col>
-                  <ion-button expand="block" color="success" fill="solid" (click)="bayarkan_date(item.id,'sudah')" >
-                    Bayarkan
-                  </ion-button>
               </ion-row>
+              <ion-button expand="block" color="success" fill="solid" (click)="bayarkan_date(item.id,'sudah')" >
+                Bayarkan
+              </ion-button>
             </ion-grid>
           </div>
 
