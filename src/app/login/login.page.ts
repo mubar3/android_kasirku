@@ -29,6 +29,11 @@ export class LoginPage implements OnInit {
   }
 
   async cek_login(){
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading..',
+      spinner: 'bubbles',
+    });
+    await loading.present();
     this.session=await this.storage.get('session');
     if(this.session != ''){
 
@@ -38,11 +43,13 @@ export class LoginPage implements OnInit {
       this.http.post(`${environment.baseUrl}`+'/get_barang_new',parameter,{})
         .subscribe(data => {
           const response=JSON.parse(JSON.stringify(data))
+          loading.dismiss();
           if(response.status){
             this.route.navigate(['/dashboard']);
           }
         });  
     }
+    loading.dismiss();
   }
 
   async login(){

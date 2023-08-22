@@ -70,7 +70,7 @@ export class BarangPage implements OnInit {
     }else{
         this.route.navigate(['/']);
     }
-    this.open_link()
+    // this.open_link()
   }
   
   async open_link(){
