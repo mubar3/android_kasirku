@@ -28,6 +28,8 @@ export class TransaksiPage implements OnInit {
   public keuntungan_kotor=0;
   public biaya_sewa=0;
   public total_gaji=0;
+  public total_kasbon=0;
+  public total_gaji_akhir=0;
   public penjualan=0;
   public restok=0;
   public data_karyawan=([] as any[]);
@@ -152,6 +154,8 @@ export class TransaksiPage implements OnInit {
           this.keuntungan_kotor=response.keuntungan_kotor
           this.biaya_sewa=response.biaya_sewa
           this.total_gaji=response.total_gaji
+          this.total_kasbon=response.total_kasbon
+          this.total_gaji_akhir=response.total_gaji_akhir
           this.data_karyawan=response.data_karyawan
           loading.dismiss();
         }else{
@@ -182,6 +186,7 @@ export class TransaksiPage implements OnInit {
       'restok' : this.restok,
       'gaji_sewa' : this.total_gaji + this.biaya_sewa,
       'total_gaji' : this.total_gaji,
+      'kasbon' : this.total_kasbon,
       'biaya_sewa' : this.biaya_sewa,
       'karyawan' : JSON.stringify(this.data_karyawan),
     }
@@ -230,10 +235,11 @@ export class TransaksiPage implements OnInit {
             Object.keys(response.data[elt]['karyawan']).forEach((elt2, index)=>{
               if(response.data[elt]['karyawan'][elt2]['bayar'] == 'n'){
                   if(this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']] !== undefined){
-                    this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']]=Number(this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']])+Number(response.data[elt]['karyawan'][elt2]['jumlah'])
-                    console.log(this.gaji_karyawan)
+                    this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']]=Number(this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']])+(Number(response.data[elt]['karyawan'][elt2]['jumlah']) - Number(response.data[elt]['karyawan'][elt2]['kasbon']))
+                    // console.log(this.gaji_karyawan)
                   }else{
-                    this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']]=response.data[elt]['karyawan'][elt2]['jumlah']
+                    this.gaji_karyawan[response.data[elt]['karyawan'][elt2]['user_id']]=Number(response.data[elt]['karyawan'][elt2]['jumlah']) - Number(response.data[elt]['karyawan'][elt2]['kasbon'])
+                    // console.log(this.gaji_karyawan)
                   }
                   this.id_karyawan[response.data[elt]['karyawan'][elt2]['user_id']]=response.data[elt]['karyawan'][elt2]['name']
                   this.tagihan_gaji+=Number(response.data[elt]['karyawan'][elt2]['jumlah'])

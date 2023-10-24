@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <!-- <ion-title>Tambah</ion-title> -->
-    <ion-card>
+    <ion-card *ngIf="bahan_tab">
       <ion-item>
       <ion-grid>
         <ion-row>
@@ -63,7 +63,34 @@
           Tambah
         </ion-button>
       </ion-col>
+      <ion-item>
+        <ion-toggle (click)="bahan()">bahan</ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-toggle (click)="kasbon()">Kasbon</ion-toggle>
+      </ion-item>
     </ion-row>
+  </ion-grid>
+  
+  <ion-grid *ngIf="kasbon_status">
+    <ion-row>
+      <ion-col>
+        <ion-select placeholder="Karyawan" [(ngModel)]="kasbon_user">
+          <ion-select-option *ngFor="let users of kasbon_users" [value]="users.id">{{ users.name }}</ion-select-option>
+        </ion-select>
+      </ion-col>
+      <ion-col>
+        <ion-input type="number" label="Banyak" [(ngModel)]="kasbon_banyak" labelPlacement="stacked" placeholder="Wajib"></ion-input>
+      </ion-col>
+      <ion-col>
+        <ion-input type="date" label="Tanggal" [(ngModel)]="kasbon_tanggal" labelPlacement="stacked" placeholder="unlimited"></ion-input>
+      </ion-col>
+    </ion-row>
+    <ion-col>
+      <ion-button color="primary" fill="solid" (click)="tambah_kasbon()" >
+        Simpan
+      </ion-button>
+    </ion-col>
   </ion-grid>
   <ion-card *ngFor="let item of datas_barang; index as i" >
     <form  #form="ngForm" (ngSubmit)="alert_update(form,i,item.id)">

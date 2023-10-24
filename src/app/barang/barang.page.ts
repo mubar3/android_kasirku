@@ -35,6 +35,12 @@ export class BarangPage implements OnInit {
   public namabahan_update=([] as any[]);
   public banyakbahan_update=([] as any[]);
   public ketbahan_update=([] as any[]);
+  public kasbon_status=false;
+  public kasbon_user=null;
+  public kasbon_users=([] as any[]);
+  public kasbon_banyak=null;
+  public kasbon_tanggal=null;
+  public bahan_tab=false;
 
   constructor(
     private storage: Storage,
@@ -66,6 +72,12 @@ export class BarangPage implements OnInit {
           if(!response.status){
             this.route.navigate(['/']);
           }
+        });
+
+      this.http.post(`${environment.baseUrl}`+'/get_userid',parameter,{})
+      .subscribe(data => {
+          const response=JSON.parse(JSON.stringify(data))
+          this.kasbon_users=response.data
         });  
     }else{
         this.route.navigate(['/']);
@@ -333,7 +345,7 @@ export class BarangPage implements OnInit {
         const response=JSON.parse(JSON.stringify(data))
         if(response.status){
           this.absensi=response.data
-          console.log(response.data)
+          // console.log(response.data)
           loading.dismiss();
         }else{
           loading.dismiss();
@@ -436,6 +448,49 @@ export class BarangPage implements OnInit {
         this.myapp.presentAlert2('eror');
         this.get_bahan()
       }); 
-  }  
+  }
 
+  async bahan(){
+    this.bahan_tab=this.bahan_tab ? false : true
+  }
+
+  async kasbon(){
+    this.absensi=[]
+    this.datas_barang=[]
+    this.datas_bahan=[]
+    this.kasbon_status=this.kasbon_status ? false : true
+  }
+  
+  async tambah_kasbon(){
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading..',
+      spinner: 'bubbles',
+    });
+    await loading.present();
+
+    let parameter={
+      "session" : this.session,
+      "userid" : this.kasbon_user,
+      "banyak" : this.kasbon_banyak,
+      "tanggal" : this.kasbon_tanggal,
+    }
+    this.http.post(`${environment.baseUrl}`+'/add_casbon',parameter,{})
+      .subscribe(data => {
+        const response=JSON.parse(JSON.stringify(data))
+        if(response.status){
+          loading.dismiss();
+          this.myapp.presentToast_copy('bottom','Berhasil disimpan')
+        }else{
+          loading.dismiss();
+          this.myapp.presentAlert2(JSON.stringify(response.message));
+        }
+      },error=>{
+        loading.dismiss();
+        this.myapp.presentAlert2('eror');
+      });
+    
+    this.kasbon_user = null
+    this.kasbon_banyak = null
+    this.kasbon_tanggal = null
+  }
 }
