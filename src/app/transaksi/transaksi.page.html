@@ -118,7 +118,7 @@
           <ion-input label="Total penjualan" value="{{ penjualan | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
         </ion-label>
         <ion-label>
-          <ion-input label="Total cash" value="{{ penjualan-uang_dibawa | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
+          <ion-input label="Total cash" value="{{ penjualan-uang_dibawa-total_kasbon | currency:'Rp ':'symbol':'3.0' }}" labelPlacement="stacked" placeholder="Enter text" readonly></ion-input>
         </ion-label>
       </ion-item>
       <ion-item>
