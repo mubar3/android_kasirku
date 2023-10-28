@@ -242,7 +242,7 @@ export class TransaksiPage implements OnInit {
                     // console.log(this.gaji_karyawan)
                   }
                   this.id_karyawan[response.data[elt]['karyawan'][elt2]['user_id']]=response.data[elt]['karyawan'][elt2]['name']
-                  this.tagihan_gaji+=Number(response.data[elt]['karyawan'][elt2]['jumlah'])
+                  this.tagihan_gaji+=Number(response.data[elt]['karyawan'][elt2]['jumlah']) - Number(response.data[elt]['karyawan'][elt2]['kasbon'])
               }
             })
           })
