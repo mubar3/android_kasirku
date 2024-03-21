@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage-angular';
 import { AlertController} from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+// import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 @Component({
   selector: 'app-tab3',
@@ -23,6 +24,7 @@ export class Tab3Page {
     private storage: Storage,
     private alertController: AlertController,
     private http: HttpClient,
+    // private inAppBrowser: InAppBrowser,
     ) {
       this.oninit()
     }
@@ -36,11 +38,11 @@ export class Tab3Page {
 
     this.session=await this.storage.get('session')
     this.email=await this.storage.get('email')
-    
+
     loading.dismiss();
   }
 
-  
+
 
   async alert_data(){
     const alert = await this.alertController.create({
@@ -63,7 +65,7 @@ export class Tab3Page {
             name: 'password',
             type: 'text',
             placeholder:"Password baru",
-        }],  
+        }],
       buttons: [
         {
           text: 'Cancel',
@@ -110,7 +112,7 @@ export class Tab3Page {
       },error=>{
         loading.dismiss();
         this.myapp.presentAlert2('eror');
-      });  
+      });
   }
 
   async logout(){
@@ -141,7 +143,17 @@ export class Tab3Page {
       },error=>{
         loading.dismiss();
         this.myapp.presentAlert2('eror');
-      });  
-      
+      });
+
+  }
+
+  resep(){
+    window.open('https://drive.google.com/file/d/1IQoP_ubTQpZ1J2H4kb3CDKS77kjHDx4Q/view?usp=sharing');
+    // const filePath = 'https://drive.google.com/file/d/1IQoP_ubTQpZ1J2H4kb3CDKS77kjHDx4Q/view?usp=sharing'; // Lokasi file PDF di dalam proyek
+    // cordova.plugins.pdfViewer.showPdf(filePath, { landscape: 'landscape', enableThumbs: false });
+    // const url = 'https://drive.google.com/file/d/1IQoP_ubTQpZ1J2H4kb3CDKS77kjHDx4Q/view?usp=sharing'; // Ganti dengan URL PDF Anda
+    // const browser = this.inAppBrowser.create(url, '_blank');
+    // this.iab.create(`https://bawana-cahaya-abadi.com/rfid/`, `_blank`, 'location=no,zoom=no,toolbar=no');
+
   }
 }
