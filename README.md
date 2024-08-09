@@ -17,3 +17,7 @@ Kasirku
 <a href="https://mbshop.id"><img src="readme/1 (10).jpg" width="200"></a>
 <a href="https://mbshop.id"><img src="readme/1 (11).jpg" width="200"></a>
 </p>
+
+## How to build apk
+```
+ionic cordova build android
